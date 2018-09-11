@@ -37,13 +37,19 @@ object Settings {
     "apache-snapshots" at "http://repository.apache.org/snapshots/"
   )
 
-  lazy val batchDependencies: Seq[ModuleID] = Seq(
+  lazy val commonDependencies: Seq[ModuleID] = Seq(
     "org.apache.spark" %% "spark-core" % "2.3.1" % "provided",
     "org.apache.spark" %% "spark-sql" % "2.3.1" % "provided",
+    "org.scalatest" %% "scalatest" % "3.0.4" % "test"
+  )
+
+  lazy val batchDependencies: Seq[ModuleID] = Seq(
     "com.ibm.stocator" % "stocator" % "1.0.24",
     "com.typesafe" % "config" % "1.3.2",
-    "com.typesafe.scala-logging" %% "scala-logging" % "3.5.0",
-    "org.scalatest" %% "scalatest" % "3.0.4" % "test",
-    "com.holdenkarau" %% "spark-testing-base" % "2.3.1_0.10.0" % "test"
+    "com.typesafe.scala-logging" %% "scala-logging" % "3.5.0"
+  )
+
+  lazy val demoDependencies: Seq[ModuleID] = Seq(
+    "com.pan" %% "batchpipelinetoolkit" % "0.0.2"
   )
 }

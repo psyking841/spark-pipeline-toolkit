@@ -25,11 +25,10 @@ class SourceFactory(spark: SparkSession, settings: BatchAppSettings) {
     if(datasetConf.hasPath("endDateDelta"))
       endDate = Utils.getDateWithDelta(startDate, datasetConf.getString("startDateDelta"))
 
-    //if(datasetConf.getString("format") == "ibmcos") {
     //return CosSource instance
     val sourceUriBuilder = SourceUriBuilder.builder()
     //Building input paths or directories
-    sourceUriBuilder.withSchema(datasetConf.getString("cos"))
+    sourceUriBuilder.withSchema(datasetConf.getString("schema"))
       .withBucket(datasetConf.getString("bucket"))
       .withPathPrefix(datasetConf.getString("pathPrefix"))
       .withStartDate(startDate)
@@ -44,7 +43,6 @@ class SourceFactory(spark: SparkSession, settings: BatchAppSettings) {
       .withFormat(datasetConf.getString("format"))
       .withDirectory(inputPaths)
       .build()
-    //}
   }
 }
 

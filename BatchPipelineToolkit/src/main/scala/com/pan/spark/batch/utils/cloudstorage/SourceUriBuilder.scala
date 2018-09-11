@@ -25,7 +25,7 @@ class SourceUriBuilder extends UriBuilderBase {
     * @return
     */
   def getPathUriSet(): Seq[URI] = {
-    val allFullPath: Seq[Path] = Utils.getInputPaths(absPrefix, startDate, endDate, layout)
+    val allFullPath: Seq[Path] = Utils.getFullPaths(absPrefix, startDate, endDate, layout)
     allFullPath.map(p => new URI(schema, bucket, p.toString, null))
   }
 }

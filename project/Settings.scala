@@ -5,7 +5,7 @@ import sbtassembly.PathList
 import sbtassembly.AssemblyKeys._
 
 object Settings {
-  lazy val VERSION = "0.0.1"
+  lazy val VERSION = "0.0.2"
   lazy val SCALA_VERSION = "2.11.12"
   lazy val ORGANIZATION = "com.pan"
 

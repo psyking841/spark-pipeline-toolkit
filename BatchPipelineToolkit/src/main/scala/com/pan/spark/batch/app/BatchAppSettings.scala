@@ -34,7 +34,7 @@ class BatchAppSettings(config: Config) {
   /**
     * Support a sets of input datasets, example of inputs:
     * First input dataset which is located in S3/IBMCOS. In your code, you can get the dataframe by
-    * val input1Df = getSource("name_of_dataset1").source()
+    * val input1Df = getSource("name_of_dataset1").source
     *
     * -Dinputs.name_of_dataset1.bucket=campaignevent
     * -Dinputs.name_of_dataset1.pathPrefix=path/to/data

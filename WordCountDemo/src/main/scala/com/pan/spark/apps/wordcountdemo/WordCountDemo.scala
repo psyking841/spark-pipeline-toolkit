@@ -1,7 +1,6 @@
 package com.pan.spark.apps.wordcountdemo
 
 import java.util.Calendar
-
 import com.pan.spark.batch.app.BatchAppBase
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions._

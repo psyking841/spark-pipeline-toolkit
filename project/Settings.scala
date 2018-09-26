@@ -5,7 +5,7 @@ import sbtassembly.PathList
 import sbtassembly.AssemblyKeys._
 
 object Settings {
-  lazy val VERSION = "0.0.2"
+  lazy val VERSION = "0.0.3-SNAPSHOT"
   lazy val SCALA_VERSION = "2.11.12"
   lazy val ORGANIZATION = "com.pan"
 
@@ -38,18 +38,18 @@ object Settings {
   )
 
   lazy val commonDependencies: Seq[ModuleID] = Seq(
-    "org.apache.spark" %% "spark-core" % "2.3.1" % "provided",
-    "org.apache.spark" %% "spark-sql" % "2.3.1" % "provided",
-    "org.scalatest" %% "scalatest" % "3.0.4" % "test"
+    "org.apache.spark" %% "spark-core" % "2.3.1",
+    "org.apache.spark" %% "spark-sql" % "2.3.1",
+    "org.scalatest" %% "scalatest" % "3.0.4" % "test",
+    "com.typesafe.scala-logging" %% "scala-logging" % "3.5.0"
   )
 
   lazy val batchDependencies: Seq[ModuleID] = Seq(
     "com.ibm.stocator" % "stocator" % "1.0.24",
-    "com.typesafe" % "config" % "1.3.2",
-    "com.typesafe.scala-logging" %% "scala-logging" % "3.5.0"
+    "com.typesafe" % "config" % "1.3.2"
   )
 
   lazy val demoDependencies: Seq[ModuleID] = Seq(
-    "com.pan" %% "batchpipelinetoolkit" % "0.0.2"
+    "com.pan" %% "batchpipelinetoolkit" % "0.0.3-SNAPSHOT"
   )
 }

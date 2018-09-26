@@ -16,7 +16,9 @@ abstract class BatchAppBase extends App {
   /**
     * A container for all configurations for input datasets, output datasets and spark
     */
-  private val defaultSettings = new BatchAppSettings()
+  protected val defaultSettings = new BatchAppSettings()
+
+  val appParams: AppParams = new AppParams(defaultSettings)
 
   /**
     * Store default configurations for configuring SparkSession
@@ -30,12 +32,12 @@ abstract class BatchAppBase extends App {
     val sessionBuilder = SparkSession.builder().config("spark.sql.session.timeZone", "UTC")
 
     //In case running in local
-    if (defaultSettings.getDefaultConfigs.getString("environment") == "local") {
+    if (defaultSettings.defaultConfigs.getString("environment") == "local") {
       sessionBuilder.master("local[*]")
     }
 
     //Adding customized configurations to SparkSession
-    SparkConfigurator(sessionBuilder.getOrCreate()).getConfigedSparkWith(defaultSettings)
+    SparkConfigurator(sessionBuilder.getOrCreate()).getConfigedSparkWith(appParams)
   }
 
   /**
@@ -46,18 +48,18 @@ abstract class BatchAppBase extends App {
   /**
     * A factory object for getting different types of sources
     */
-  private val sourceFactory: SourceFactory = SourceFactory(spark, defaultSettings)
+  private val sourceFactory = new SourceFactory(defaultSettings)
 
   /**
     * A factory object for getting different types of sinks
     */
-  private val sinkFactory: SinkFactory = SinkFactory(spark, defaultSettings)
+  private val sinkFactory = new SinkFactory(defaultSettings)
 
   /**
     * Sourcing data based on the inputFormat
     */
   def getDataSourceFor(dataset: String): Source = {
-    sourceFactory.getDataSource(dataset)
+    sourceFactory.getDataSource(dataset)(spark)
   }
 
   /**
@@ -65,6 +67,12 @@ abstract class BatchAppBase extends App {
     */
   def getDataSinkFor(dataset: String): Sink = {
     sinkFactory.getDataSink(dataset)
+  }
+
+  def getCommand(): String = {
+    "spark-submit --driver-java-options '" + appParams.asJavaOptions() + " " +
+      sourceFactory.paramsAsJavaOptions() + " " + sinkFactory.paramsAsJavaOptions() +
+      "' --class [class name] [jar location]"
   }
 
   /**

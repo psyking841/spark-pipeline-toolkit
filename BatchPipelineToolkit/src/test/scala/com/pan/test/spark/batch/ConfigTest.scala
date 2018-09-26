@@ -8,7 +8,7 @@ class ConfigTest extends FlatSpec with Matchers {
 
   "Settings for inputs/outputs" should "be properly taken" in {
 
-    System.setProperty("environment", "local")
+    System.setProperty("environment", "dev")
     System.setProperty("format", "parquet")
     System.setProperty("startDate", "2018-09-01T00:00:00-0000") //default start date
     System.setProperty("endDate", "2018-09-01T01:00:00-0000") //default end date
@@ -29,7 +29,6 @@ class ConfigTest extends FlatSpec with Matchers {
     System.setProperty("inputs.dataset1.schema", "s3")
     System.setProperty("inputs.dataset1.bucket", "input1_bucket")
     System.setProperty("inputs.dataset1.pathPrefix", "/input1/test/path")
-    System.setProperty("inputs.dataset1.startDate", "input_sd1")
     System.setProperty("inputs.dataset1.layout", "hourly")
 
     //dataset2 specific values
@@ -49,17 +48,17 @@ class ConfigTest extends FlatSpec with Matchers {
     System.setProperty("outputs.dataset3.layout", "hourly")
 
     val settings = new BatchAppSettings()
-    val defaultConfig: Config = settings.getDefaultConfigs
-    val input1: Config = settings.getInputsConfigs("dataset1")
-    val input2: Config = settings.getInputsConfigs("dataset2")
+    val defaultConfig: Config = settings.defaultConfigs
+    val input1: Config = settings.inputsConfigs("dataset1")
+    val input2: Config = settings.inputsConfigs("dataset2")
 
-    val output: Config = settings.getOutputsConfigs("dataset3")
+    val output: Config = settings.outputsConfigs("dataset3")
 
     //with fallback we can get startDate for output3 even though we did not specify it for output3
     output.withFallback(defaultConfig).getString("startDate") should be ("2018-09-01T00:00:00-0000")
 
     //eval default values for s3
-    defaultConfig.getString("environment") should be ("local")
+    defaultConfig.getString("environment") should be ("dev")
     defaultConfig.getString("awsKeyId") should be ("ABCDEFG")
     defaultConfig.getString("awsSecretKey") should be ("12345678!@#$%")
     defaultConfig.getString("startDate") should be ("2018-09-01T00:00:00-0000")
@@ -77,7 +76,7 @@ class ConfigTest extends FlatSpec with Matchers {
     input1.getString("pathPrefix") should be ("/input1/test/path")
     input1.getString("schema") should be ("s3")
     input1.getString("format") should be ("parquet") //should take the default value
-    input1.getString("startDate") should be ("input_sd1") //should override the default
+    input1.getString("startDate") should be ("2018-09-01T00:00:00-0000") //should take the default
     input1.getString("layout") should be ("hourly") //should override the default
 
     //if key not available for specific input, inherit that from default

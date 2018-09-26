@@ -23,13 +23,13 @@ class BatchAppSettings(config: Config) {
     * Get the configurations based on environment; this is a mandatory option in command line
     * I.e. -Denvironment is mandatory
     */
-  private val environment: String = config.getString("environment")
+  protected val environment: String = config.getString("environment")
 
   /**
     * envConfig will be used as default Config; for example, if -DawsKeyId is provided, it will be available under envConfig and will be served as default value.
     * So if the specific input does not provide awsKeyId, the default awsKeyId will be used
     */
-  private val envConfig: Config = config.withFallback(config.getConfig(environment))
+  protected val envConfig: Config = config.withFallback(config.getConfig(environment))
 
   /**
     * Support a sets of input datasets, example of inputs:
@@ -44,7 +44,7 @@ class BatchAppSettings(config: Config) {
     * -Dinputs.name_of_dataset1.endDate=2018-06-01T01:00:00-0000;
     *
     */
-  private val inputs: Config = envConfig.getConfig("inputs")
+  protected val inputs: Config = envConfig.getConfig("inputs")
 
   /**
     * Support a set of output datasets in S3/IBMCOS:
@@ -55,11 +55,11 @@ class BatchAppSettings(config: Config) {
     * -Doutputs.name_of_dataset1.saveMode=append
     * -Doutputs.name_of_dataset1.partitionColumns=year,month,day //If this is used, the output path will not be named with startDate, instead it will be named by partition columns specified in this option
     */
-  private val outputs: Config = envConfig.getConfig("outputs")
+  protected val outputs: Config = envConfig.getConfig("outputs")
 
-  def getInputsConfigs(inputDateName: String): Config = inputs.getConfig(inputDateName).withFallback(envConfig)
-  def getOutputsConfigs(outputDateName: String): Config = outputs.getConfig(outputDateName).withFallback(envConfig)
+  def inputsConfigs(inputDateName: String): Config = inputs.getConfig(inputDateName).withFallback(envConfig)
+  def outputsConfigs(outputDateName: String): Config = outputs.getConfig(outputDateName).withFallback(envConfig)
 
-  def getDefaultConfigs: Config = envConfig
+  def defaultConfigs: Config = envConfig
 }
 

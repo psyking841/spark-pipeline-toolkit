@@ -2,7 +2,7 @@ package com.pan.spark.batch.datasinks
 
 import org.apache.spark.sql.DataFrame
 
-class CloudStorageSink extends Sink {
+class CloudStorageSink(params: CloudStorageSinkParams) extends Sink {
   private var directory: String = _
   private var saveMode: String = _
   private var format: String = _
@@ -21,32 +21,4 @@ class CloudStorageSink extends Sink {
   }
 
   def emit: DataFrame => Unit = emit(Seq())
-}
-
-object CloudStorageSink {
-
-  def builder(): Builder = new Builder
-
-  class Builder {
-    private val sink: CloudStorageSink = new CloudStorageSink()
-
-    def withSaveMode(saveMode: String): Builder = {
-      sink.saveMode = saveMode
-      this
-    }
-
-    def withFormat(format: String): Builder = {
-      sink.format = format
-      this
-    }
-
-    def withOutputDirectory(directory: String): Builder = {
-      sink.directory = directory
-      this
-    }
-
-    def build(): CloudStorageSink = {
-      return sink
-    }
-  }
 }

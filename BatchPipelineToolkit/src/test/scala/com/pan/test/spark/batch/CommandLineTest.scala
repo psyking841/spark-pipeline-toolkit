@@ -7,6 +7,7 @@ import org.scalatest.{FlatSpec, Matchers}
 
 class CommandLineTest extends FlatSpec with Matchers {
   System.setProperty("environment", "dev")
+  System.setProperty("dryRun", "")
   System.setProperty("format", "parquet")
   System.setProperty("startDate", "2018-09-01T00:00:00-0000") //default start date
   System.setProperty("endDate", "2018-09-01T01:00:00-0000") //default end date
@@ -92,8 +93,8 @@ class CommandLineTest extends FlatSpec with Matchers {
     "-Dfs.s3a.impl=org.apache.hadoop.fs.s3native.NativeS3FileSystem " +
     "-Dfs.cos.ibmServiceName.iam.service.id=changeme'")
 
+  // Test for printing command line
   class TestAppClass extends BatchAppBase {
-    System.setProperty("dryRun", "")
     run {
       print("Test")
     }

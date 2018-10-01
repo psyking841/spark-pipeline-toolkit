@@ -15,15 +15,6 @@ class SparkSessionConstructor(spark: SparkSession.Builder) {
     //Config SparkSession (post-construction)
     lazy val postConstructor: SparkSessionPostConstructor = new SparkSessionPostConstructor(spark.getOrCreate())
 
-//    val configMap = Map(
-//      "fs.s3a.impl" -> "org.apache.hadoop.fs.s3native.NativeS3FileSystem",
-//      "fs.stocator.scheme.list" -> "cos",
-//      "fs.cos.impl" -> "com.ibm.stocator.fs.ObjectStoreFileSystem",
-//      "fs.stocator.cos.impl" -> "com.ibm.stocator.fs.cos.COSAPIClient",
-//      "fs.stocator.cos.scheme" -> "cos",
-//      "fs.cos.myCos.v2.signer.type" -> "false"
-//    )
-
     appParams.fsOptionsMap.foreach{ case (k: String, v: String) => postConstructor.withHadoopOption(k, v) }
     postConstructor.build()
   }

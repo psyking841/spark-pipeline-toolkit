@@ -1,6 +1,6 @@
 package com.pan.test.spark.batch
 
-import com.pan.spark.batch.app.{AppParams, BatchAppSettings}
+import com.pan.spark.batch.app.{AppParams, BatchAppBase, BatchAppSettings}
 import com.pan.spark.batch.datasinks.SinkFactory
 import com.pan.spark.batch.datasources.SourceFactory
 import org.scalatest.{FlatSpec, Matchers}
@@ -92,4 +92,13 @@ class CommandLineTest extends FlatSpec with Matchers {
     "-Dfs.s3a.impl=org.apache.hadoop.fs.s3native.NativeS3FileSystem " +
     "-Dfs.cos.ibmServiceName.iam.service.id=changeme'")
 
+  class TestAppClass extends BatchAppBase {
+    System.setProperty("dryRun", "")
+    run {
+      print("Test")
+    }
+  }
+
+  val testClass = new TestAppClass()
+  testClass.getCommand should be ("spark-submit master=local[*] -conf spark.submit.deployMode=client -conf spark.sql.session.timeZone=UTC --driver-java-options '-Denvironment=dev -DstartDate=2018-09-01T00:00:00-0000 -DendDate=2018-09-01T01:00:00-0000 -Dfs.stocator.scheme.list=cos -Dfs.s3a.awsSecretAccessKey=changeme -Dfs.cos.ibmServiceName.endpoint=changeme -Dfs.cos.ibmServiceName.v2.signer.type=false -Dfs.cos.ibmServiceName.access.key=changeme -Dfs.stocator.cos.impl=com.ibm.stocator.fs.cos.COSAPIClient -Dfs.cos.impl=com.ibm.stocator.fs.ObjectStoreFileSystem -Dfs.s3a.awsAccessKeyId=changeme -Dfs.cos.ibmServiceName.secret.key=changeme -Dfs.stocator.cos.scheme=cos -Dfs.s3a.impl=org.apache.hadoop.fs.s3native.NativeS3FileSystem -Dfs.cos.ibmServiceName.iam.service.id=changeme -Dinputs.dataset1.schema=s3 -Dinputs.dataset1.bucket=input1_bucket -Dinputs.dataset1.pathPrefix=/input1/test/path -Dinputs.dataset1.format=parquet -Dinputs.dataset1.layout=hourly -Dinputs.dataset1.startDate=2018-09-01T00:00:00-0000 -Dinputs.dataset1.endDate=2018-09-01T01:00:00-0000 -Dinputs.dataset2.schema=cos -Dinputs.dataset2.bucket=cos_input2_bucket -Dinputs.dataset2.pathPrefix=/cos/another/test/path -Dinputs.dataset2.format=json -Dinputs.dataset2.layout=daily -Dinputs.dataset2.startDate=2018-09-03T00:00:00-0000 -Dinputs.dataset2.endDate=2018-09-04T00:00:00-0000 -Doutputs.dataset3.schema=cos -Doutputs.dataset3.bucket=cos_output_bucket -Doutputs.dataset3.pathPrefix=/cos/output/test/path -Doutputs.dataset3.format=parquet -Doutputs.dataset3.layout=hourly -Doutputs.dataset3.startDate=2018-09-01T00:00:00-0000' --class [class name] [jar location]")
 }

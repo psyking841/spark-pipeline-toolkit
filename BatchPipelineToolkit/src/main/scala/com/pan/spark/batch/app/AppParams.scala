@@ -10,24 +10,8 @@ import scala.collection.JavaConversions._
   */
 class AppParams(settings: BatchAppSettings) extends Params{
 
-//  val ibmServiceName: String =
-//    if(settings.defaultConfigs.hasPath("ibmServiceName")) settings.defaultConfigs.getString("ibmServiceName")
-//    else "defaultServiceName"
-//
-//  val MAPPINGS: Map[String, String] = Map(
-//    "awsSecretKey" -> "fs.s3a.awsSecretAccessKey",
-//    "awsKeyId" -> "fs.s3a.awsAccessKeyId",
-//    "ibmCosSecretKey" -> ("fs.cos" + ibmServiceName + "secret.key"),
-//    "ibmCosAccessKey" -> ("fs.cos." + ibmServiceName + ".access.key"),
-//    "endpoint" -> ("fs.cos." + ibmServiceName + ".endpoint"),
-//    "serviceId" -> ("fs.cos." + ibmServiceName + ".iam.service.id"))
-
-  lazy val fsOptionsMap: Map[String, String] = {
+  lazy val fsOptionsMap: Map[String, String] =
     settings.fsConfigs.entrySet().map{e => (e.getKey, settings.fsConfigs.getString(e.getKey))}.toMap
-//    MAPPINGS.keys.flatMap({
-//      k => { if (settings.defaultConfigs.hasPath(k)) Some(k, settings.defaultConfigs.getString(k)) else None }
-//    }).toMap
-  }
 
   val sparkSessionOptionsMap: Map[String, String] = {
     var res: Map[String, String] = Map()
@@ -35,10 +19,6 @@ class AppParams(settings: BatchAppSettings) extends Params{
     res ++ (for( e <- settings.sparkConfigs.entrySet(); if e.getKey != "master" )
               yield ("spark." + e.getKey, settings.sparkConfigs.getString(e.getKey))).toMap
   }
-
-//  val hadoopOptionsMap: Map[String, String] = {
-//    optionsMap.map( e => fsOptionsMap(e._1) -> e._2 )
-//  }
 
   def sparkConfigsToCMLString: String = {
     sparkSessionOptionsMap

@@ -12,7 +12,6 @@ import org.joda.time.DateTime
 class SourceUriBuilder extends UriBuilderBase {
   var startDate: DateTime = _
   var endDate: DateTime = _
-  //val datasetNamePattern = """([a-zA-Z]+)([a-zA-Z/]+)""".r
 
   /**
     * Get a sequence of uri based on start date (inclusive and end date (exclusive);

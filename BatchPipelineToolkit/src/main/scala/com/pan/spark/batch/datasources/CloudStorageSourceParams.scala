@@ -77,7 +77,7 @@ class CloudStorageSourceParams(datasetConf: Config, datasetName: String) extends
     sourceUriBuilder.build().getPathUriSet().map(_.toString)
   }
 
-  override def asJavaOptions: String = {
+  override def toCMLString: String = {
     "-Dinputs." + datasetName + ".schema=" + schema + " " +
     "-Dinputs." + datasetName + ".bucket=" + bucket + " " +
     "-Dinputs." + datasetName + ".pathPrefix=" + pathPrefix + " " +

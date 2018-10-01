@@ -64,7 +64,7 @@ class CloudStorageSinkParams(datasetConf: Config, datasetName: String) extends P
     sinkUriBuilder.build().getPathUri().toString
   }
 
-  def asJavaOptions: String = {
+  override def toCMLString: String = {
     "-Doutputs." + datasetName + ".schema=" + schema + " " +
     "-Doutputs." + datasetName + ".bucket=" + bucket + " " +
     "-Doutputs." + datasetName + ".pathPrefix=" + pathPrefix + " " +

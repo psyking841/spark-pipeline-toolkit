@@ -3,6 +3,7 @@ package com.pan.test.spark.batch
 import com.pan.spark.batch.app.BatchAppSettings
 import org.scalatest.{FlatSpec, Matchers}
 import com.typesafe.config.Config
+import scala.collection.JavaConversions._
 
 class ConfigTest extends FlatSpec with Matchers {
 
@@ -47,7 +48,20 @@ class ConfigTest extends FlatSpec with Matchers {
     System.setProperty("outputs.dataset3.pathPrefix", "/cos/output/test/path")
     System.setProperty("outputs.dataset3.layout", "hourly")
 
+    //Test cases for spark conf, it will take those in reference.conf plus "spark.app.name=MyApp" as below
+    System.setProperty("spark.app.name", "MyApp")
+
+    //Test fetching configurations for spark options
     val settings = new BatchAppSettings()
+    val sparkConfig: Config = settings.sparkConfigs
+    sparkConfig.entrySet().map{ e => ("spark." + e.getKey, sparkConfig.getString(e.getKey))} should be (
+      Set(("spark.app.name", "MyApp"),
+        ("spark.master", "local[*]"),
+        ("spark.submit.deployMode", "client"),
+        ("spark.sql.session.timeZone", "UTC"))
+    )
+
+    //Test fetching configurations for the app
     val defaultConfig: Config = settings.defaultConfigs
     val input1: Config = settings.inputsConfigs("dataset1")
     val input2: Config = settings.inputsConfigs("dataset2")

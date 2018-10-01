@@ -26,19 +26,9 @@ abstract class BatchAppBase extends App {
   final val logger = LogManager.getLogger(getClass.getName)
 
   /**
-    * SparkSession variable with configurations from config file
+    * Configure SparkSession with configurations from config file
     */
-  lazy val spark: SparkSession = {
-    val sessionBuilder = SparkSession.builder().config("spark.sql.session.timeZone", "UTC")
-
-    //In case running in local
-    if (defaultSettings.defaultConfigs.getString("environment") == "local") {
-      sessionBuilder.master("local[*]")
-    }
-
-    //Adding customized configurations to SparkSession
-    SparkConfigurator(sessionBuilder.getOrCreate()).getConfigedSparkWith(appParams)
-  }
+  lazy val spark: SparkSession = SparkSessionConstructor(SparkSession.builder).getConfigedSparkWith(appParams)
 
   /**
     * Make SparkContext available to children objects
@@ -69,9 +59,9 @@ abstract class BatchAppBase extends App {
     sinkFactory.getDataSink(dataset)
   }
 
-  def getCommand(): String = {
-    "spark-submit --driver-java-options '" + appParams.asJavaOptions() + " " +
-      sourceFactory.paramsAsJavaOptions() + " " + sinkFactory.paramsAsJavaOptions() +
+  def getCommand: String = {
+    "spark-submit" + appParams.sparkConfigsToCMLString + " --driver-java-options '" +
+      appParams.hadoopOptionsToCLMString + " " + sourceFactory.toCMLString + " " + sinkFactory.toCMLString +
       "' --class [class name] [jar location]"
   }
 

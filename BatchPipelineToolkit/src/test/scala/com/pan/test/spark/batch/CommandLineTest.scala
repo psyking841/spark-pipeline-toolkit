@@ -48,7 +48,7 @@ class CommandLineTest extends FlatSpec with Matchers {
   val sourceFactory = new SourceFactory(defaultSettings)
   //println(sourceFactory.paramsAsJavaOptions())
 
-  sourceFactory.paramsAsJavaOptions() should be (
+  sourceFactory.toCMLString should be (
     "-Dinputs.dataset1.schema=s3 -Dinputs.dataset1.bucket=input1_bucket -Dinputs.dataset1.pathPrefix=/input1/test/path " +
       "-Dinputs.dataset1.format=parquet -Dinputs.dataset1.layout=hourly -Dinputs.dataset1.startDate=2018-09-01T00:00:00-0000 " +
       "-Dinputs.dataset1.endDate=2018-09-01T01:00:00-0000 " +
@@ -58,9 +58,9 @@ class CommandLineTest extends FlatSpec with Matchers {
 
 
   val sinkFactory = new SinkFactory(defaultSettings)
-  println(sinkFactory.paramsAsJavaOptions())
+  //println(sinkFactory.paramsAsJavaOptions())
 
-  sinkFactory.paramsAsJavaOptions() should be (
+  sinkFactory.toCMLString should be (
     "-Doutputs.dataset3.schema=cos " +
       "-Doutputs.dataset3.bucket=cos_output_bucket " +
       "-Doutputs.dataset3.pathPrefix=/cos/output/test/path " +
@@ -69,6 +69,27 @@ class CommandLineTest extends FlatSpec with Matchers {
   )
 
   val appParams = new AppParams(defaultSettings)
-  //print(appParams.asJavaOptions())
-  appParams.asJavaOptions() should be ("")
+  appParams.sparkConfigsToCMLString should be (
+    "master=local[*] -conf spark.submit.deployMode=client -conf spark.sql.session.timeZone=UTC"
+  )
+
+  appParams.hadoopOptionsToCLMString should be (
+    "-Dfs.stocator.scheme.list=cos -Dfs.s3a.awsSecretAccessKey=changeme " +
+      "-Dfs.cos.ibmServiceName.endpoint=changeme -Dfs.cos.ibmServiceName.v2.signer.type=false " +
+      "-Dfs.cos.ibmServiceName.access.key=changeme -Dfs.stocator.cos.impl=com.ibm.stocator.fs.cos.COSAPIClient " +
+      "-Dfs.cos.impl=com.ibm.stocator.fs.ObjectStoreFileSystem -Dfs.s3a.awsAccessKeyId=changeme " +
+      "-Dfs.cos.ibmServiceName.secret.key=changeme -Dfs.stocator.cos.scheme=cos " +
+      "-Dfs.s3a.impl=org.apache.hadoop.fs.s3native.NativeS3FileSystem -Dfs.cos.ibmServiceName.iam.service.id=changeme"
+  )
+
+  appParams.toCMLString should be ("master=local[*] -conf spark.submit.deployMode=client " +
+    "-conf spark.sql.session.timeZone=UTC --driver-java-options '-Dfs.stocator.scheme.list=cos " +
+    "-Dfs.s3a.awsSecretAccessKey=changeme -Dfs.cos.ibmServiceName.endpoint=changeme " +
+    "-Dfs.cos.ibmServiceName.v2.signer.type=false -Dfs.cos.ibmServiceName.access.key=changeme " +
+    "-Dfs.stocator.cos.impl=com.ibm.stocator.fs.cos.COSAPIClient " +
+    "-Dfs.cos.impl=com.ibm.stocator.fs.ObjectStoreFileSystem -Dfs.s3a.awsAccessKeyId=changeme " +
+    "-Dfs.cos.ibmServiceName.secret.key=changeme -Dfs.stocator.cos.scheme=cos " +
+    "-Dfs.s3a.impl=org.apache.hadoop.fs.s3native.NativeS3FileSystem " +
+    "-Dfs.cos.ibmServiceName.iam.service.id=changeme'")
+
 }

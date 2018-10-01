@@ -26,10 +26,22 @@ class BatchAppSettings(config: Config) {
   protected val environment: String = config.getString("environment")
 
   /**
-    * envConfig will be used as default Config; for example, if -DawsKeyId is provided, it will be available under envConfig and will be served as default value.
+    * envConfig will be used as default Config for the application; for example, if -DawsKeyId is provided,
+    * it will be available under envConfig and will be served as default value.
     * So if the specific input does not provide awsKeyId, the default awsKeyId will be used
     */
-  protected val envConfig: Config = config.withFallback(config.getConfig(environment))
+  protected val envConfig: Config =
+    if(config.hasPath(environment)) config.withFallback(config.getConfig(environment))
+    else config
+
+  /**
+    * sparkConfig will be used to pupolate Spark Config; for example, if -Dspark.app.name=MyApp is provided,
+    * it will be used for "spark-submit ... --conf spark.app.name=MyApp".
+    */
+  protected val sparkConfig: Config = config.getConfig("spark")
+
+
+  protected val fsConfig: Config = config.getConfig("fs")
 
   /**
     * Support a sets of input datasets, example of inputs:
@@ -61,5 +73,7 @@ class BatchAppSettings(config: Config) {
   def outputsConfigs(outputDateName: String): Config = outputs.getConfig(outputDateName).withFallback(envConfig)
 
   def defaultConfigs: Config = envConfig
+  def sparkConfigs: Config = sparkConfig
+  def fsConfigs: Config = fsConfig
 }
 

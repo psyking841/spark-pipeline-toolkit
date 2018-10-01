@@ -25,8 +25,8 @@ class SourceFactory(settings: BatchAppSettings) {
     }
   }
 
-  def paramsAsJavaOptions(): String = {
-    paramsMap.values.map(_.asJavaOptions).mkString(" ")
+  def toCMLString: String = {
+    paramsMap.values.map(_.toCMLString).mkString(" ")
   }
 
   /**

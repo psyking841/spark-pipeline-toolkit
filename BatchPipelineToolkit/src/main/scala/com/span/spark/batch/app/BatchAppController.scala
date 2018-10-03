@@ -59,18 +59,23 @@ class BatchAppController {
   }
 
   def getCommand: String = {
-    val envParam: String =
-      if(defaultSettings.defaultConfigs.hasPath("environment"))
-        defaultSettings.defaultConfigs.getString("environment")
-      else "[environment]"
+    val envParam: String = defaultSettings.defaultConfigs.getString("environment")
 
-    val startDate: String = if(defaultSettings.defaultConfigs.hasPath("startDate"))
-      defaultSettings.defaultConfigs.getString("startDate")
-    else "[startDate]"
+    val startDate: String = {
+      try{
+        defaultSettings.defaultConfigs.getString("startDate")
+      } catch {
+        case java.lang.IllegalArgumentException => "[YYYY-MM-DDThh:mm:ss-0000]"
+      }
+    }
 
-    val endDate: String = if(defaultSettings.defaultConfigs.hasPath("endDate"))
-      defaultSettings.defaultConfigs.getString("endDate")
-    else "[endDate]"
+    val endDate: String = {
+      try {
+        defaultSettings.defaultConfigs.getString("endDate")
+      } catch {
+        case java.lang.IllegalArgumentException => "[YYYY-MM-DDThh:mm:ss-0000]"
+      }
+    }
 
     "spark-submit " + appParams.sparkConfigsToCMLString + " --driver-java-options '" + "-Denvironment=" + envParam +
       " -DstartDate=" + startDate + " -DendDate=" + endDate + " " + appParams.hadoopOptionsToCLMString +

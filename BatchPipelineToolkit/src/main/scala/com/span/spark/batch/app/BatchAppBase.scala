@@ -11,7 +11,7 @@ class BatchAppBase extends BatchAppController with App{
   def run(batchprocessorFunction: => Unit): Unit = {
     if (defaultSettings.defaultConfigs.hasPath("dryRun")) {
       logger.info("In dryrun mode, printing the command line: ")
-      logger.info(getCommand)
+      logger.info(getCommand())
     } else batchprocessorFunction
   }
 }

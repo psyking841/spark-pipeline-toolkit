@@ -18,10 +18,10 @@ Will support AWS redshift and IBM DB2 Warehouse
 ## Usage
 See WordCountDemo project for how to use.
 There is a "dry-run" mode to just print the full spark-submit command line that is going to be run.
-To enable the "dry-run" mode, have -DdryRun passed to java options
+To enable the "dry-run" mode, have -DdryRun passed to java options.
 For example:
 ```
-spark-submit --driver-java-options "-DdryRun -DstartDate=2018-10-01T00:00:00-0000 -DendDate=2018-10-01T01:00:00-0000" --class com.span.spark.apps.wordcountdemo.WordCountDemo /Users/shengyipan/Workspace/spark-pipeline-toolkit/WordCountDemo/target/scala-2.11/WordCountDemo.jar
+spark-submit --driver-java-options "-DdryRun" --class com.span.spark.apps.wordcountdemo.WordCountDemo /Users/shengyipan/Workspace/spark-pipeline-toolkit/WordCountDemo/target/scala-2.11/WordCountDemo.jar
 ```
 
 This will print the full command line:

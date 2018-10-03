@@ -4,8 +4,6 @@ import com.span.spark.batch.app.{AppParams, BatchAppSettings}
 import org.scalatest.{FlatSpec, Matchers}
 import com.typesafe.config.Config
 
-import scala.collection.JavaConversions._
-
 class ConfigTest extends FlatSpec with Matchers {
 
   "Settings for inputs/outputs" should "be properly taken" in {
@@ -14,17 +12,6 @@ class ConfigTest extends FlatSpec with Matchers {
     System.setProperty("format", "parquet")
     System.setProperty("startDate", "2018-09-01T00:00:00-0000") //default start date
     System.setProperty("endDate", "2018-09-01T01:00:00-0000") //default end date
-
-    //Default configs for reading from/writing to S3
-    //System.setProperty("awsKeyId", "ABCDEFG")
-    //System.setProperty("awsSecretKey", "12345678!@#$%")
-
-    //Default configs for reading from/writing to IBM COS
-    //System.setProperty("ibmServiceName", "myCos")
-    //System.setProperty("endpoint", "https://xyz.softlayer.net")
-    //System.setProperty("serviceId", "ServiceId-12345")
-    //System.setProperty("ibmCosAccessKey", "87654321!@#$%")
-    //System.setProperty("ibmCosSecretKey", "abcde")
 
     //Adding two additional input data sources: dataset1 at S3 and dataset2 at IBM COS to those in test/resources
     //dataset1 specific values
@@ -78,14 +65,6 @@ class ConfigTest extends FlatSpec with Matchers {
         "fs.stocator.cos.impl" -> "com.ibm.stocator.fs.cos.COSAPIClient")
     )
 
-    //    val sparkConfig: Config = settings.sparkConfigs
-//    sparkConfig.entrySet().map{ e => ("spark." + e.getKey, sparkConfig.getString(e.getKey))} should be (
-//      Set(("spark.app.name", "MyApp"),
-//        ("spark.master", "local[*]"),
-//        ("spark.submit.deployMode", "client"),
-//        ("spark.sql.session.timeZone", "UTC"))
-//    )
-
     //Test fetching configurations for the app
     val defaultConfig: Config = settings.defaultConfigs
     val input1: Config = settings.inputsConfigs("dataset1")
@@ -96,19 +75,10 @@ class ConfigTest extends FlatSpec with Matchers {
     //with fallback we can get startDate for output3 even though we did not specify it for output3
     output.withFallback(defaultConfig).getString("startDate") should be ("2018-09-01T00:00:00-0000")
 
-    //eval default values for s3
+    //eval default values
     defaultConfig.getString("environment") should be ("dev")
-    //defaultConfig.getString("awsKeyId") should be ("ABCDEFG")
-    //defaultConfig.getString("awsSecretKey") should be ("12345678!@#$%")
     defaultConfig.getString("startDate") should be ("2018-09-01T00:00:00-0000")
     defaultConfig.getString("endDate") should be ("2018-09-01T01:00:00-0000")
-
-    //eval default values for IBM COS
-//    defaultConfig.getString("ibmServiceName") should be ("myCos")
-//    defaultConfig.getString("endpoint") should be ("https://xyz.softlayer.net")
-//    defaultConfig.getString("serviceId") should be ("ServiceId-12345")
-//    defaultConfig.getString("ibmCosAccessKey") should be ("87654321!@#$%")
-//    defaultConfig.getString("ibmCosSecretKey") should be ("abcde")
 
     //eval input dataset configs from test/resources
     textData.getString("bucket") should be ("test-bucket-span001")
@@ -127,7 +97,6 @@ class ConfigTest extends FlatSpec with Matchers {
     input1.getString("layout") should be ("hourly") //should override the default
 
     //if key not available for specific input, inherit that from default
-    //input1.getString("awsKeyId") should be ("ABCDEFG")
     input1.getString("endDate") should be ("2018-09-01T01:00:00-0000")
 
     //eval input dataset1 sepcific values

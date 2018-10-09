@@ -67,7 +67,7 @@ object SourceUriBuilder {
     }
 
     def build(): SourceUriBuilder = {
-      return pathUri
+      pathUri
     }
   }
 }

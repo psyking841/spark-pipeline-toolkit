@@ -37,7 +37,7 @@ class ConfigTest extends FlatSpec with Matchers {
     System.setProperty("outputs.dataset3.layout", "hourly")
 
     //Test cases for spark conf, it will take those in reference.conf plus "spark.app.name=MyApp" as below
-    System.setProperty("spark.spark.app.name", "MyApp")
+    System.setProperty("spark_config.spark.app.name", "MyApp")
 
     //Test fetching configurations for spark options
     val settings = new BatchAppSettings()

@@ -2,6 +2,7 @@ package com.span.spark.batch.app
 
 import com.span.spark.batch.datasinks.{Sink, SinkFactory}
 import com.span.spark.batch.datasources.{Source, SourceFactory}
+import com.span.spark.batch.utils.Utils
 import org.apache.log4j.LogManager
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.SparkSession
@@ -10,7 +11,7 @@ import org.apache.spark.sql.SparkSession
   * This class manages the configurations (default ones and inputs/outputs specific ones)
   * and provides the Spark application developer syntax sugar for sourcing and sinking datasets
   */
-class BatchAppController {
+class BatchAppConfig {
 
   /**
     * A container for all configurations for input datasets, output datasets and spark
@@ -37,12 +38,12 @@ class BatchAppController {
   /**
     * A factory object for getting different types of sources
     */
-  private val sourceFactory = new SourceFactory(defaultSettings)
+  lazy private val sourceFactory = new SourceFactory(defaultSettings)
 
   /**
     * A factory object for getting different types of sinks
     */
-  private val sinkFactory = new SinkFactory(defaultSettings)
+  lazy private val sinkFactory = new SinkFactory(defaultSettings)
 
   /**
     * Sourcing data based on the inputFormat
@@ -60,22 +61,24 @@ class BatchAppController {
 
   def getCommand: String = {
     val envParam: String = defaultSettings.defaultConfigs.getString("environment")
-
-    val startDate: String = {
-      try{
-        defaultSettings.defaultConfigs.getString("startDate")
-      } catch {
-        case java.lang.IllegalArgumentException => "[YYYY-MM-DDThh:mm:ss-0000]"
-      }
-    }
-
-    val endDate: String = {
+    val startDate: String =
       try {
-        defaultSettings.defaultConfigs.getString("endDate")
+        val d = defaultSettings.defaultConfigs.getString("startDate")
+        Utils.getDateTimeInTimeZone(d)
+        d
       } catch {
-        case java.lang.IllegalArgumentException => "[YYYY-MM-DDThh:mm:ss-0000]"
+        case e: IllegalArgumentException => Utils.now
       }
-    }
+
+
+    val endDate: String =
+      try {
+        val d = defaultSettings.defaultConfigs.getString("endDate")
+        Utils.getDateTimeInTimeZone(d)
+        d
+      } catch {
+        case e: IllegalArgumentException => Utils.now
+      }
 
     "spark-submit " + appParams.sparkConfigsToCMLString + " --driver-java-options '" + "-Denvironment=" + envParam +
       " -DstartDate=" + startDate + " -DendDate=" + endDate + " " + appParams.hadoopOptionsToCLMString +

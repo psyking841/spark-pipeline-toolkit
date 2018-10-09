@@ -12,37 +12,37 @@ class CloudStorageSourceParams(datasetConf: Config, datasetName: String) extends
   /**
     * Schema of the source: s3 or cos
     */
-  var schema: String = datasetConf.getString("schema")
+  lazy val schema: String = datasetConf.getString("schema")
 
   /**
     * Bucket of the source data
     */
-  var bucket: String = datasetConf.getString("bucket")
+  lazy val bucket: String = datasetConf.getString("bucket")
 
   /**
     * ABSOLUTE path of the source data (after the bucket name)
     */
-  var pathPrefix: String = datasetConf.getString("pathPrefix")
+  lazy val pathPrefix: String = datasetConf.getString("pathPrefix")
 
   /**
     * The format of source data: json, parquet etc.
     */
-  var format: String = datasetConf.getString("format")
+  lazy val format: String = datasetConf.getString("format")
 
   /**
     * The layout of source data: daily, hourly etc.
     */
-  var layout: String = datasetConf.getString("layout")
+  lazy val layout: String = datasetConf.getString("layout")
 
   /**
     * Optional; if provided, the schema will be applied to the sourced dataframe
     */
-  var datasetSchema: Option[StructType] = None
+  lazy val datasetSchema: Option[StructType] = None
 
   /**
     * Upper bound of the source data
     */
-  var startDate: DateTime = {
+  lazy val startDate: DateTime = {
     val sd = Utils.getDateTimeInTimeZone(datasetConf.getString("startDate"))
     if (datasetConf.hasPath("startDateDelta")) {
       Utils.getDateWithDelta(sd, datasetConf.getString("startDateDelta"))
@@ -54,7 +54,7 @@ class CloudStorageSourceParams(datasetConf: Config, datasetName: String) extends
   /**
     * Lower bound of the source data
     */
-  var endDate: DateTime = {
+  lazy val endDate: DateTime = {
     val ed = Utils.getDateTimeInTimeZone(datasetConf.getString("endDate"))
     if (datasetConf.hasPath("endDateDelta")) {
       Utils.getDateWithDelta(ed, datasetConf.getString("endDateDelta"))

@@ -38,10 +38,10 @@ class BatchAppSettings(config: Config) {
     * sparkConfig will be used to pupolate Spark Config; for example, if -Dspark.app.name=MyApp is provided,
     * it will be used for "spark-submit ... --conf spark.app.name=MyApp".
     */
-  protected val sparkConfig: Config = config.getConfig("spark")
+  protected val sparkConfig: Config = config.getConfig("spark_config")
 
 
-  protected val hadoopConfig: Config = config.getConfig("hadoop")
+  protected val hadoopConfig: Config = config.getConfig("hadoop_config")
 
   /**
     * Support a sets of input datasets, example of inputs:

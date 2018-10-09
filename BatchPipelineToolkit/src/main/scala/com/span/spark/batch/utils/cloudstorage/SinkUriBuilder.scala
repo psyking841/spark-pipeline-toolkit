@@ -65,7 +65,7 @@ object SinkUriBuilder {
     }
 
     def build(): SinkUriBuilder = {
-      return pathUri
+      pathUri
     }
   }
 }

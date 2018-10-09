@@ -8,6 +8,12 @@ import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
 object Utils {
 
   /**
+    * Get now in given format
+    * @return
+    */
+  def now: String = displayDateTimeInTimeZone(DateTime.now(DateTimeZone.UTC), "yyyy-MM-dd'T'HH:mm:ssZ")
+
+  /**
     * Convert a date string in a specific pattern to DateTime object
     * @param strDateTime
     * @param inPattern; by default it is yyyy-MM-dd'T'HH:mm:ssZ, which is used by command line start/end dates

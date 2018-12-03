@@ -38,10 +38,11 @@ object Settings {
   )
 
   lazy val commonDependencies: Seq[ModuleID] = Seq(
-    "org.apache.spark" %% "spark-core" % "2.3.1",
-    "org.apache.spark" %% "spark-sql" % "2.3.1",
+    "org.apache.spark" %% "spark-core" % "2.4.0" % "provided",
+    "org.apache.spark" %% "spark-sql" % "2.4.0" % "provided",
+    "com.typesafe.scala-logging" %% "scala-logging" % "3.5.0",
     "org.scalatest" %% "scalatest" % "3.0.4" % "test",
-    "com.typesafe.scala-logging" %% "scala-logging" % "3.5.0"
+    "com.holdenkarau" %% "spark-testing-base" % "2.3.1_0.10.0" % "test"
   )
 
   lazy val batchDependencies: Seq[ModuleID] = Seq(

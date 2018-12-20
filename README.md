@@ -1,19 +1,31 @@
 # Spark Pipeline Toolkit library
 
-Author: Shengyi Pan
+Creator: Shengyi Pan
+
+Please feel free to file pull requests.
+
+## What this library does?
+Using this library allows you to save your configurations to a Spark job in a json file. And the library provides logic to parse this configurations. I mean to make this library much easier to add new configurations and new parsers.
 
 ## Problem Statement
 When building a batch job pipeline, one might run into the trouble in generating a spark-submit command line for the frequent-run Spark job. For example, for a daily-run Spark job, the date string in the spark-submit command line needs to be changed daily/hourly (depending on how frequent your batch job runs).
 
-One might also run into the issue where he/she has to read data from different data sources, so the application code could become messy because configurations for different sources have to be setup in the applicaiton code together with logic.
+Or, when you are running Spark job with a scheduler, say Airflow, you typically store parameters (for your Spark job to communicate to DB or Microservices) in DAG file. The downside of doing this is that you are basically using Airflow as a storage for parameters (isn't this what DB should do for you?), which makes your DAG script bloated. It would be nice if the configurations is stored in a DB friendly format like json, yaml etc.
 
-## Features
+To my point of view, the parameters should be stored with the Spark job itself, as different Spark job will need different sets of parameters. When another developer is reading your code, parameters should be within the reach to increase the readability (for example, what configurations and default parameters to the configurations this job is using).  However, when you put your configuration parsing logic in the code (I mean the Spark application code), the code could easily become bloated because you will have to include all the parsing logic. For example, one might also run into the issue where he/she has to read data from different data sources (e.g. different DBs, different Cloud Storage services), configurations to connect to these data sources have to be setup in the applicaiton code together with the parsing logic.
+
+Therefore, there is a need for a place/library to have all those parsing logic for the configurations/parameters in json or yaml.
+
+## Features Description
 ### Spark command line auto generation
+Descriptions. (TO DO)
 
 ### Modulization of configurations and application code (the code for your Spark application logic)
+Descriptions. (TO DO)
 
-### Support for IBMCOS, S3 as source and sink
-Will support AWS redshift and IBM DB2 Warehouse
+### Support for IBM COS, S3 as source and sink
+Descriptions for IBM COS. (TO DO)
+Will support AWS redshift and IBM DB2 Warehouse.
 
 ## Usage
 See WordCountDemo project for how to use.

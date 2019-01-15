@@ -5,7 +5,7 @@ Creator: Shengyi Pan
 Please feel free to file pull requests.
 
 ## What this library does?
-Using this library allows you to save your configurations to a Spark job (both job configs and Spark configs)in a json file. And the library provides logic to parse this configurations. I mean to make this library much easier to add new configurations and new parsers.
+Using this library allows you to save your configurations to a Spark job (both job configs and Spark configs)in a json file. And the library provides logic to parse this configurations. I meant to make this library much easier to add new configurations and new parsers.
 
 ## Problem Statement
 When building a batch job pipeline, one might run into the trouble in generating a spark-submit command line for the frequent-run Spark job. For example, for a daily-run Spark job, the date string in the spark-submit command line needs to be changed daily/hourly (depending on how frequent your batch job runs).

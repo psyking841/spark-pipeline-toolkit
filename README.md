@@ -1,6 +1,6 @@
 # Spark Pipeline Toolkit library
 
-Creator: Shengyi Pan
+Copyright © 2019 Shengyi Pan
 
 Please feel free to file pull requests.
 
